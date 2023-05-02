@@ -50,9 +50,11 @@ function App() {
       </div>
       </header>
      {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
+     
+     
       <ul className="member-list">
         {getMembers().map((member: any) =>
-          <li key={member.statedistrict}>{getMemberName(member)}</li>
+          <li className="text-3xl text-blue-900 font-bold" key={member.statedistrict}>{getMemberName(member)}</li>
         )}
       </ul>
     </main>

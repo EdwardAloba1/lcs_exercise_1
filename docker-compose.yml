@@ -1,0 +1,23 @@
+
+services:
+  frontend:
+    image: node:18-slim
+    command: ./run.sh
+    working_dir: /frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+
+  api:
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    command: dotnet watch run --urls http://0.0.0.0:5000/
+    working_dir: /api
+    ports:
+      - "5000:5000"
+    volumes:
+      - type: bind
+        source: ./api
+        target: /api

@@ -1,25 +1,41 @@
 import React, { useState } from "react";
+import { useTable } from "react-table";
 
-type TableData = {
-  id: number;
-  name: string;
-  age: number;
-};
 
-const data: TableData[] = [
-  { id: 1, name: "Alice", age: 25 },
-  { id: 2, name: "Bob", age: 30 },
-  { id: 3, name: "Charlie", age: 20 },
-  { id: 4, name: "David", age: 35 },
-  { id: 5, name: "Emily", age: 28 },
-];
 
-const Table = () => {
+
+const Table = ({name}: any, {members}: any) => {
+
+  type TableData = {
+    id: number;
+    name: string;
+    age: number;
+  };
+  
+  var data: TableData[] = [
+   
+  ];
+  
+  function pushData(name:any){
+    for(let i=0; i<name.length; i++){
+      console.log("pushing"); //use i instead of 0
+      data.push({id: i, name: name[i], age: 35 })
+      
+      
+  }
+  }
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(30);
   const [sortColumn, setSortColumn] = useState("");
-  const [sortDirection, setSortDirection] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc");
   const [filter, setFilter] = useState("");
+
+  console.log(members)
+ 
+  let test = new Set(name)
+  console.log(Array.from(test).length + "Testinggggg")
+  pushData(Array.from(test))
 
   const sortedData = data.slice().sort((a, b) => {
     if (sortDirection === "asc") {
@@ -48,14 +64,16 @@ const Table = () => {
     setFilter(event.target.value);
     setCurrentPage(1);
   };
+  
 
   return (
-    <div>
+    <div >
       <input type="text" onChange={handleFilter} value={filter} />
-      <table>
+      <style>
+      </style>
+      <table border={20}>
         <thead>
           <tr>
-            
             <th onClick={() => handleSort("name")}>Name</th>
             <th onClick={() => handleSort("age")}>Age</th>
           </tr>

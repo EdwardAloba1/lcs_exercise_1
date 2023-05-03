@@ -53,7 +53,10 @@ function App() {
      {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
      
      <div>
-       <Table></Table>
+       <Table name={getMembers().map((member: any) => getMemberName(member))} 
+              members={getMembers().map((member: any) => getMemberName(member))}>
+         
+       </Table>
      </div>
       <ul className="member-list">
         {getMembers().map((member: any) =>

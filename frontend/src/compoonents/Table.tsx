@@ -4,23 +4,33 @@ import { useTable } from "react-table";
 
 
 
-const Table = ({name}: any, {members}: any) => {
+const Table = ({memberInfo}: any) => {
 
   type TableData = {
     id: number;
     name: string;
-    age: number;
+    state: string;
+  };
+
+  const getMemberName = (member: any): string => {
+    return member?.['member-info']?.namelist || '';
+  };
+
+  const getMemberState = (member: any): string => {
+    return member?.['member-info']?.['state']?.['state-fullname'];
   };
   
   var data: TableData[] = [
    
   ];
   
-  function pushData(name:any){
-    for(let i=0; i<name.length; i++){
-      console.log("pushing"); //use i instead of 0
-      data.push({id: i, name: name[i], age: 35 })
-      
+  function pushData(members:any){
+    for(let i=0; i<members.length; i++){
+
+      //console.log(memberInfo.map((s) => getMemberState(s))); //use i instead of 0
+      data.push({id: i, 
+        name: members[i]?.['member-info']?.namelist , 
+        state: members[i]?.['member-info']?.['state']?.['state-fullname'] })
       
   }
   }
@@ -31,11 +41,14 @@ const Table = ({name}: any, {members}: any) => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [filter, setFilter] = useState("");
 
-  console.log(members)
- 
-  let test = new Set(name)
-  console.log(Array.from(test).length + "Testinggggg")
-  pushData(Array.from(test))
+  //console.log(memberInfo)
+  let list = memberInfo.map((member: any) => getMemberName(member))
+  
+  console.log(memberInfo)
+
+  let test = new Set(list)
+  //console.log(Array.from(test) + "Testinggggg")
+  pushData(memberInfo)
 
   const sortedData = data.slice().sort((a, b) => {
     if (sortDirection === "asc") {
@@ -75,7 +88,7 @@ const Table = ({name}: any, {members}: any) => {
         <thead>
           <tr>
             <th onClick={() => handleSort("name")}>Name</th>
-            <th onClick={() => handleSort("age")}>Age</th>
+            <th onClick={() => handleSort("state")}>State</th>
           </tr>
         </thead>
         <tbody>
@@ -83,7 +96,7 @@ const Table = ({name}: any, {members}: any) => {
             <tr key={item.id}>
               
               <td>{item.name}</td>
-              <td>{item.age}</td>
+              <td>{item.state}</td>
             </tr>
           ))}
         </tbody>

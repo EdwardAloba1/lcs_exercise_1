@@ -84,7 +84,8 @@ const Table = ({memberInfo}: any) => {
       <input type="text" onChange={handleFilter} value={filter} />
       <style>
       </style>
-      <table border={20}>
+      <table  style={{border: '1px solid'}}>
+        
         <thead>
           <tr>
             <th onClick={() => handleSort("name")}>Name</th>
@@ -94,7 +95,6 @@ const Table = ({memberInfo}: any) => {
         <tbody>
           {currentPageData.map((item) => (
             <tr key={item.id}>
-              
               <td>{item.name}</td>
               <td>{item.state}</td>
             </tr>

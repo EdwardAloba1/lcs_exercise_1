@@ -53,7 +53,7 @@ function App() {
      {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
      
      <div>
-       <Table memberInfo={getMembers()}>
+       <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}>
          
        </Table>
      </div>

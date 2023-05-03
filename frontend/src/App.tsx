@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import 'reset-css';
 import NavbarScroller from './compoonents/NavbarScroller';
+import Table from './compoonents/Table';
 
 const API_URL = 'http://localhost:5000/test/json';
 
@@ -51,7 +52,9 @@ function App() {
       </header>
      {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
      
-     
+     <div>
+       <Table></Table>
+     </div>
       <ul className="member-list">
         {getMembers().map((member: any) =>
           <li className="text-3xl text-blue-900 font-bold" key={member.statedistrict}>{getMemberName(member)}</li>

@@ -42,9 +42,9 @@ function App() {
   }, []);
 
   return (
-    <main className="app">
+    <main >
       <header>
-        <div className="App">
+        <div >
         <NavbarScroller brand={brand} links={links}/>
         <div className="navBar">
         </div>
@@ -52,16 +52,12 @@ function App() {
       </header>
      {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
      
-     <div>
+     <div className="mt-4">
        <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}>
          
        </Table>
      </div>
-      <ul className="member-list">
-        {getMembers().map((member: any) =>
-          <li className="text-3xl text-blue-900 font-bold" key={member.statedistrict}>{getMemberName(member)}</li>
-        )}
-      </ul>
+      
     </main>
     
   );

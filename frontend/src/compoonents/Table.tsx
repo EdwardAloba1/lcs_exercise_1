@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from 'primereact/inputtext';
@@ -7,6 +7,11 @@ import { Toast } from 'primereact/toast';
 import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown } from 'primereact/dropdown';
 import { ListBox } from 'primereact/listbox';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import { BlockUI } from 'primereact/blockui';
+import { Panel } from 'primereact/panel';
+
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
@@ -118,6 +123,64 @@ const onColumnToggle = (event: any) => {
     setSelectedColumns(orderedSelectedColumns);
 }
 
+const [displayBasic, setDisplayBasic] = useState(false);
+const [position, setPosition] = useState('center');
+
+const dialogFuncMap = {
+  'displayBasic': setDisplayBasic,
+}
+
+const onClick = ( event:any) => {
+  dialogFuncMap["displayBasic"](true);
+  console.log(event.data.name)
+  if (position) {
+      setPosition(position);
+  }
+  return (
+    <Dialog header="Header" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+    Test
+    </Dialog>
+);
+}
+
+const onHide = (name: any) => {
+  dialogFuncMap["displayBasic"](false);
+}
+
+const renderFooter = (name: any) => {
+  return (
+    
+      <div>  
+        <div>test</div>
+        <Button label="Close" icon="pi pi-check" onClick={() => onHide(name)} autoFocus />
+      </div>
+  );
+}
+
+const [blockedPanel, setBlockedPanel] = useState<boolean>(true);
+const [blockedDocument, setBlockedDocument] = useState<boolean>(false);
+
+useEffect(() => {
+    if(blockedDocument){
+        setTimeout(() => {
+            setBlockedDocument(true);
+        }, 3000);
+    }
+}, [blockedDocument])
+
+const blockDocument = () => {
+    setBlockedDocument(true);
+}
+
+const blockPanel = () => {
+    setBlockedPanel(true);
+}
+
+const unblockPanel = () => {
+    setBlockedPanel(false);
+}
+
+
 const onRowSelect = (event: any) => {
   console.log(event)
   alert(
@@ -128,20 +191,26 @@ const onRowSelect = (event: any) => {
     `Town Name: ${event.data.townname}` 
   )
 }
-  
+const inputText = (
+  <div>
+    <InputText value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} />
+  </div>
+);
+
   return (
     
     <div >
-      <script src="https://unpkg.com/primereact/primereact.all.min.js"></script>
-      <div>
-      <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
-      </div>
-      <InputText  
-      style={{border:'1px solid #ff0000'}} value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} 
-      />
       
+      <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
+      
+      
+      <Dialog maximizable header="Header" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+    Test
+    </Dialog>
       <div>
-      <DataTable value={filteredData} selectionMode="single"  onRowSelect={onRowSelect} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      
+      <DataTable value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      
         <Column field="name" sortable header="Name"></Column>
         <Column field="state" sortable header="State"></Column>
         <Column field="party" sortable header="Party"></Column>

@@ -3,6 +3,7 @@ import './App.css';
 import 'reset-css';
 import NavbarScroller from './compoonents/NavbarScroller';
 import Table from './compoonents/Table';
+import Navbar from 'react-bootstrap/Navbar';
 
 const API_URL = 'http://localhost:5000/test/json';
 
@@ -45,6 +46,7 @@ function App() {
     <main >
       <header>
         <div >
+          <Navbar bg="light"></Navbar>
         <NavbarScroller brand={brand} links={links}/>
         <div className="navBar">
         </div>
@@ -53,7 +55,7 @@ function App() {
      
      
      <div >
-       <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}>
+       <Table paginator class="borderIgnore"  memberInfo={getMembers()}>
          
        </Table>
      </div>

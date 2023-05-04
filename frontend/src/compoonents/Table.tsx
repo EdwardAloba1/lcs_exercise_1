@@ -2,19 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
-import { Toast } from 'primereact/toast';
-import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown } from 'primereact/dropdown';
-import { ListBox } from 'primereact/listbox';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { Ripple } from 'primereact/ripple';
 import { BlockUI } from 'primereact/blockui';
 import { Panel } from 'primereact/panel';
-
 import "primereact/resources/themes/lara-light-indigo/theme.css";
-
-
 import './DataTable.css';
 
 
@@ -81,14 +75,7 @@ const Table = ({memberInfo}: any) => {
   });
 
   const filteredData = sortedData.filter((item) => {
-    const params = [item.name, item.state];
-    var filtered: TableData[] = [
    
-    ];
-    for(let i=0; i<params.length; i++){
-      filtered.push()
-      params[i].toLowerCase().includes(filter.toLowerCase());
-    }
     return item.name.toLowerCase().includes(filter.toLowerCase());
   });
   
@@ -180,6 +167,11 @@ const unblockPanel = () => {
     setBlockedPanel(false);
 }
 
+const dropdownOptions = [
+  { label: 10, value: 10 },
+  { label: 20, value: 20 },
+  { label: 50, value: 50 }
+];
 
 const onRowSelect = (event: any) => {
   console.log(event)
@@ -209,7 +201,7 @@ const inputText = (
     </Dialog>
       <div>
       
-      <DataTable value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      <DataTable  globalFilterFields={['name']} responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown" value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
       
         <Column field="name" sortable header="Name"></Column>
         <Column field="state" sortable header="State"></Column>

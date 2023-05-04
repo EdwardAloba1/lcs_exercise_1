@@ -5,6 +5,9 @@ import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import { Toast } from 'primereact/toast';
 import { ToastContainer, toast } from 'react-toastify';
+import { Dropdown } from 'primereact/dropdown';
+import { ListBox } from 'primereact/listbox';
+
 
 import './DataTable.css';
 
@@ -16,6 +19,8 @@ const Table = ({memberInfo}: any) => {
     party: string;
     name: string;
     state: string;
+    district: string;
+    townname: string
   };
 
   const getMemberName = (member: any): string => {
@@ -36,7 +41,9 @@ const Table = ({memberInfo}: any) => {
       //console.log(memberInfo.map((s) => getMemberState(s))); //use i instead of 0
       data.push({party: members[i]?.['member-info']?.["party"], 
         name: members[i]?.['member-info']?.["official-name"] , 
-        state: members[i]?.['member-info']?.['state']?.['state-fullname'] })
+        state: members[i]?.['member-info']?.['state']?.['state-fullname'],
+        district: members[i]?.['member-info']?.['district'],
+        townname: members[i]?.['member-info']?.['townname'] })
       
   }
   }
@@ -106,7 +113,7 @@ const onColumnToggle = (event: any) => {
   console.log("column ckech")
 
     let selectedColumns = event.value;
-    let orderedSelectedColumns = data.filter(col => selectedColumns.some((sCol: any) => sCol.field === col?.["name"]));
+    let orderedSelectedColumns = filteredData.filter(col => selectedColumns.some((sCol: any) => sCol.field === col?.["name"]));
     setSelectedColumns(orderedSelectedColumns);
 }
 
@@ -115,83 +122,32 @@ const onRowSelect = (event: any) => {
   alert(
     `Name: ${event.data.name} `+'\n'+
     `State: ${event.data.state}`+'\n'+
-    `Party: ${event.data.party}`
+    `Party: ${event.data.party}`+'\n'+
+    `District: ${event.data.district}`+'\n'+
+    `Town Name: ${event.data.townname}` 
   )
-  //toast.current?.show({severity: 'info',summary: 'Product Selected',detail: `Name: ${event.data.name}`});
 }
-
-
-
-
-
-
-const isSelectable = (value: any, field: any) => {
-  let isSelectable = true;
-  switch (field) {
-      case 'quantity':
-          isSelectable = value > 10;
-          break;
-      case 'name':
-      case 'category':
-          isSelectable = value.startsWith('B') || value.startsWith('A');
-          break;
-
-      default:
-          break;
-  }
-  return isSelectable;
-}
-
-const [selectedProducts12, setSelectedProducts12] = useState(null);
-
   
-
   return (
     
-    <div>
+    <div >
+      
+      <div>
+      <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
+      </div>
       <InputText  
       style={{border:'1px solid #ff0000'}} value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} 
       />
       
-      <MultiSelect value={selectedColumns} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'20em'}}/>
-      
-      <DataTable value={filteredData} selectionMode="single"  onRowSelect={onRowSelect} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+      <div>
+      <DataTable value={filteredData} selectionMode="single"  onRowSelect={onRowSelect} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
         <Column field="name" sortable header="Name"></Column>
         <Column field="state" sortable header="State"></Column>
         <Column field="party" sortable header="Party"></Column>
+        <Column field="district" sortable header="District"></Column>
+        <Column field="townname" sortable header="Town Name"></Column>
+
       </DataTable>
-
-
-
-      
-      <select name="Search" onChange={console.log} value={"h"}>
-    <optgroup label="Search Options" >
-      <option value="name">Name</option>
-      <option value="Age">Age</option>
-    </optgroup>
-      </select>
-      <style></style>
-      
-      <table  border={1} style={{border: '1px solid'}}>
-        <thead >
-          <tr>
-            <th onClick={() => handleSort("name")}>Name</th>
-            <th onClick={() => handleSort("state")}>State</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPageData.map((item) => (
-            <tr key={item.party}>
-               <td>{item.name}  </td>
-              <td>{item.state}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        {Array.from(Array(pageCount), (x, index) => (
-          <button color="red" style={{borderRadius: 4,border: '1px solid'}} key={index} onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>
-        ))}
       </div>
     </div>
   );

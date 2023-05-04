@@ -7,6 +7,7 @@ import { Toast } from 'primereact/toast';
 import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown } from 'primereact/dropdown';
 import { ListBox } from 'primereact/listbox';
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
 import './DataTable.css';
@@ -131,7 +132,7 @@ const onRowSelect = (event: any) => {
   return (
     
     <div >
-      
+      <script src="https://unpkg.com/primereact/primereact.all.min.js"></script>
       <div>
       <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
       </div>

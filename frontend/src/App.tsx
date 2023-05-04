@@ -53,9 +53,7 @@ function App() {
      
      
      <div >
-       <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}>
-         
-       </Table>
+       <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}></Table>
      </div>
       
     </main>

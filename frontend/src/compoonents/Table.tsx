@@ -7,6 +7,8 @@ import { Toast } from 'primereact/toast';
 import { ToastContainer, toast } from 'react-toastify';
 import { Dropdown } from 'primereact/dropdown';
 import { ListBox } from 'primereact/listbox';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
@@ -117,38 +119,70 @@ const onColumnToggle = (event: any) => {
     let orderedSelectedColumns = filteredData.filter(col => selectedColumns.some((sCol: any) => sCol.field === col?.["name"]));
     setSelectedColumns(orderedSelectedColumns);
 }
+const [displayBasic, setDisplayBasic] = useState(false);
+const [position, setPosition] = useState('');
+
+const dialogFuncMap = {
+  'displayBasic': setDisplayBasic,
+}
+
+const onClick = ( position: any) => {
+  dialogFuncMap["displayBasic"](true);
+  console.log("test")
+  if (position) {
+      setPosition(position);
+  }
+  return (
+    <Dialog header="Header" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+    Test
+    </Dialog>
+);
+}
+
+const onHide = (name: any) => {
+  dialogFuncMap["displayBasic"](false);
+}
 
 const onRowSelect = (event: any) => {
   console.log(event)
   alert(
-    `Name: ${event.data.name} `+'\n'+
+    `Name: ${event.data.name}`+'\n'+
     `State: ${event.data.state}`+'\n'+
     `Party: ${event.data.party}`+'\n'+
     `District: ${event.data.district}`+'\n'+
     `Town Name: ${event.data.townname}` 
   )
 }
+
+const renderFooter = (name: any) => {
+  return (
+    
+      <div>  
+        
+        <Button label="Close" icon="pi pi-check" onClick={() => onHide(name)} autoFocus />
+      </div>
+  );
+}
   
   return (
     
     <div >
-      <script src="https://unpkg.com/primereact/primereact.all.min.js"></script>
+     
       <div>
       <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
       </div>
-      <InputText  
-      style={{border:'1px solid #ff0000'}} value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} 
+      <InputText value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} 
       />
-      
       <div>
-      <DataTable value={filteredData} selectionMode="single"  onRowSelect={onRowSelect} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      
+      <DataTable value={filteredData} selectionMode="single"  onRowSelect={() => onClick('center')} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
         <Column field="name" sortable header="Name"></Column>
         <Column field="state" sortable header="State"></Column>
         <Column field="party" sortable header="Party"></Column>
         <Column field="district" sortable header="District"></Column>
         <Column field="townname" sortable header="Town Name"></Column>
-
       </DataTable>
+
       </div>
     </div>
   );

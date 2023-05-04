@@ -1,21 +1,25 @@
-import React, { useState } from "react";
-import { useTable } from "react-table";
-import '../App.css';
-import 'reset-css';
+import React, { useState, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { InputText } from 'primereact/inputtext';
+import { MultiSelect } from 'primereact/multiselect';
+import { Toast } from 'primereact/toast';
+import { ToastContainer, toast } from 'react-toastify';
+
+import './DataTable.css';
+
 
 
 const Table = ({memberInfo}: any) => {
 
   type TableData = {
-    id: number;
+    party: string;
     name: string;
     state: string;
   };
 
   const getMemberName = (member: any): string => {
-    return member?.['member-info']?.namelist || '';
+    return member?.['member-info']?.["official-name"] || '';
   };
 
   const getMemberState = (member: any): string => {
@@ -30,18 +34,20 @@ const Table = ({memberInfo}: any) => {
     for(let i=0; i<members.length; i++){
 
       //console.log(memberInfo.map((s) => getMemberState(s))); //use i instead of 0
-      data.push({id: i, 
-        name: members[i]?.['member-info']?.namelist , 
+      data.push({party: members[i]?.['member-info']?.["party"], 
+        name: members[i]?.['member-info']?.["official-name"] , 
         state: members[i]?.['member-info']?.['state']?.['state-fullname'] })
       
   }
   }
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(30);
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
   const [filter, setFilter] = useState("");
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
 
   //console.log(memberInfo)
   let list = memberInfo.map((member: any) => getMemberName(member))
@@ -87,20 +93,73 @@ const Table = ({memberInfo}: any) => {
     setFilter(event.target.value);
     setCurrentPage(1);
   };
-  
+
+  const columns = [
+    {field: 'name', header: 'Name'},
+    {field: 'party', header: 'Party'}
+    
+];
+
+const [selectedColumns, setSelectedColumns] = useState(data);
+
+const onColumnToggle = (event: any) => {
+  console.log("column ckech")
+
+    let selectedColumns = event.value;
+    let orderedSelectedColumns = data.filter(col => selectedColumns.some((sCol: any) => sCol.field === col?.["name"]));
+    setSelectedColumns(orderedSelectedColumns);
+}
+
+const onRowSelect = (event: any) => {
+  console.log(event)
+  alert(
+    `Name: ${event.data.name} `+'\n'+
+    `State: ${event.data.state}`+'\n'+
+    `Party: ${event.data.party}`
+  )
+  //toast.current?.show({severity: 'info',summary: 'Product Selected',detail: `Name: ${event.data.name}`});
+}
+
+
+
+
+
+
+const isSelectable = (value: any, field: any) => {
+  let isSelectable = true;
+  switch (field) {
+      case 'quantity':
+          isSelectable = value > 10;
+          break;
+      case 'name':
+      case 'category':
+          isSelectable = value.startsWith('B') || value.startsWith('A');
+          break;
+
+      default:
+          break;
+  }
+  return isSelectable;
+}
+
+const [selectedProducts12, setSelectedProducts12] = useState(null);
+
   
 
   return (
     
-    <div className="min-h-screen bg-gray-100 text-gray-900">
-      <input  
-      style={{border:'1px solid #ff0000'}} placeholder={`Search...`} type="text" onChange={handleFilter} value={filter} 
+    <div>
+      <InputText  
+      style={{border:'1px solid #ff0000'}} value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} 
       />
-      <DataTable value={data} tableStyle={{ minWidth: '50rem' }}>
-        <Column field="name" sortable header="name"></Column>
-        <Column field="state" sortable header="state"></Column>
-        <Column field="id" sortable header="id"></Column>
-        </DataTable>
+      
+      <MultiSelect value={selectedColumns} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'20em'}}/>
+      
+      <DataTable value={filteredData} selectionMode="single"  onRowSelect={onRowSelect} showGridlines paginator stripedRows rows={25} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
+        <Column field="name" sortable header="Name"></Column>
+        <Column field="state" sortable header="State"></Column>
+        <Column field="party" sortable header="Party"></Column>
+      </DataTable>
 
 
 
@@ -112,8 +171,7 @@ const Table = ({memberInfo}: any) => {
     </optgroup>
       </select>
       <style></style>
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
-      <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+      
       <table  border={1} style={{border: '1px solid'}}>
         <thead >
           <tr>
@@ -123,7 +181,7 @@ const Table = ({memberInfo}: any) => {
         </thead>
         <tbody>
           {currentPageData.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.party}>
                <td>{item.name}  </td>
               <td>{item.state}</td>
             </tr>

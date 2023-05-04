@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i');
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -31,10 +30,7 @@ li {
   background: transparent;
 }
 a {
-  background: lightblue;
-  display: flex;
-  justify-content: center;
-  text-decoration: none;
+  color: #fff;
 }
 
 a:visited {
@@ -47,27 +43,6 @@ a:visited {
 
 .app ul.member-list {
 
-}
-table {
-  border: 1px solid lightgray;
-}
-
-tbody {
-  border-bottom: 1px solid lightgray;
-}
-
-th {
-  border-bottom: 1px solid lightgray;
-  border-right: 1px solid lightgray;
-  padding: 2px 4px;
-}
-
-tfoot {
-  color: gray;
-}
-
-tfoot th {
-  font-weight: normal;
 }
 
 table,td,th {

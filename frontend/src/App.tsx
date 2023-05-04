@@ -50,9 +50,9 @@ function App() {
         </div>
       </div>
       </header>
-     {/* <input type="text" placeholder="Search..." className="search" onChange={e=> setQuery()}></input> */}
      
-     <div className="mt-4">
+     
+     <div >
        <Table class="borderIgnore" style="border: 1px solid;" memberInfo={getMembers()}>
          
        </Table>

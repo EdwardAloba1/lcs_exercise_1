@@ -40,7 +40,7 @@ function App() {
         <Nav></Nav>
       <div className="navBar"></div>
       </div>
-    
+    <h1 className="mb-3">Member Info</h1>
     <body>
      <div >
        <Table  memberInfo={getMembers()}></Table>

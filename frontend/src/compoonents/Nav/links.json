@@ -5,16 +5,24 @@
             "href": "/home"
         },
         {
-            "label": "About",
+            "label": "Member Information",
+            "href": ""
+        },
+        {
+            "label": "About the Clerk",
             "href": "https://clerk.house.gov/About#OverviewContact"
         },
         {
-            "label": "Commitee ",
-            "href": "/contact"
+            "label": "Commitee Information",
+            "href": "https://clerk.house.gov/committees"
         },
         {
             "label": "Disclosures",
-            "href": "/contact"
+            "href": "https://disclosures-clerk.house.gov"
+        }, 
+        {
+            "label": "Original Home Page",
+            "href": "https://clerk.house.gov"
         }
     ]
 }

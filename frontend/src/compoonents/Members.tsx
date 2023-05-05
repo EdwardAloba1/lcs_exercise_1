@@ -17,8 +17,9 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
 
-const Members = ({memberInfo}: any) => {
-
+const Members = ({MemberData}: any) => {
+  
+  const memberInfo = MemberData?.members?.member || []
   type TableData = {
     party: string;
     name: string;
@@ -31,7 +32,7 @@ const Members = ({memberInfo}: any) => {
     electedDate: string;
     swornDate: string;
   };
-
+  
   const getMemberName = (member: any): string => {
     return member?.['member-info']?.["official-name"] || '';
   };
@@ -78,13 +79,7 @@ const Members = ({memberInfo}: any) => {
     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
     'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
 });
-  //console.log(memberInfo)
-  let list = memberInfo.map((member: any) => getMemberName(member))
   
-  console.log(memberInfo)
-
-  let test = new Set(list)
-  //console.log(Array.from(test) + "Testinggggg")
   pushData(memberInfo)
 
   const sortedData = data.slice().sort((a, b) => {
@@ -224,7 +219,7 @@ const header = (event: any) => {
 }
 const inputText = (
   <div>
-    <InputText value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} />
+    <InputText value={filter} placeholder={`Search Name...`} type="text" onChange={handleFilter} />
   </div>
 );
 const [cities, setCities] = useState<any>([]);
@@ -263,7 +258,6 @@ const onCityChange = (e: { value: any, checked: boolean }) => {
         <Column field="phone" sortable header="Phone Number"></Column>
         <Column field="officeLocation" sortable header="Office Location"></Column>
         
-
       </DataTable>
       </div>
     </div>

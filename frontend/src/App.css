@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i');
-@tailwind components;
-@tailwind utilities;
 
 
 html {
@@ -48,4 +45,14 @@ a:visited {
 table,td,th {
   border-collapse:collapse;
   border: 1px solid #000000;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#div {
+  display: flex;
+  justify-content: center;
 }

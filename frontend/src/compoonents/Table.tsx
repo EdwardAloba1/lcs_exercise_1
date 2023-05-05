@@ -8,8 +8,8 @@ import { Button } from 'primereact/button';
 import { Ripple } from 'primereact/ripple';
 import { BlockUI } from 'primereact/blockui';
 import { Panel } from 'primereact/panel';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
-import './DataTable.css';
 
 
 
@@ -55,7 +55,10 @@ const Table = ({memberInfo}: any) => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [filter, setFilter] = useState("");
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-
+  const [filters, setFilters] = useState({
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+});
   //console.log(memberInfo)
   let list = memberInfo.map((member: any) => getMemberName(member))
   
@@ -124,9 +127,11 @@ const onClick = ( event:any) => {
       setPosition(position);
   }
   return (
-    <Dialog header="Header" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
-    Test
+    <div>
+    <Dialog header="Headr" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+    Testing
     </Dialog>
+    </div>
 );
 }
 
@@ -138,7 +143,7 @@ const renderFooter = (name: any) => {
   return (
     
       <div>  
-        <div>test</div>
+        <div>tested</div>
         <Button label="Close" icon="pi pi-check" onClick={() => onHide(name)} autoFocus />
       </div>
   );
@@ -173,6 +178,15 @@ const dropdownOptions = [
   { label: 50, value: 50 }
 ];
 
+const onGlobalFilterChange = (event: any) => {
+  const value = event.target.value;
+  let _filters = { ...filters };
+  _filters['global'].value = value;
+
+  setFilters(_filters);
+  setGlobalFilterValue(value);
+}
+
 const onRowSelect = (event: any) => {
   console.log(event)
   alert(
@@ -193,17 +207,11 @@ const inputText = (
     
     <div >
       
-      <Dropdown value={filteredData} options={columns} optionLabel="header" onChange={onColumnToggle} style={{width:'40em'}}/>
-      
-      
-      <Dialog maximizable header="Header" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
-    Test
-    </Dialog>
       <div>
       
-      <DataTable  globalFilterFields={['name']} responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown" value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown" value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
       
-        <Column field="name" sortable header="Name"></Column>
+        <Column field="name" sortable  header="Name"></Column>
         <Column field="state" sortable header="State"></Column>
         <Column field="party" sortable header="Party"></Column>
         <Column field="district" sortable header="District"></Column>

@@ -4,6 +4,7 @@ import 'reset-css';
 import NavbarScroller from './compoonents/NavbarScroller';
 import Table from './compoonents/Table';
 import Navbar from 'react-bootstrap/Navbar';
+import { DataTable } from "primereact/datatable";
 
 const API_URL = 'http://localhost:5000/test/json';
 
@@ -53,13 +54,13 @@ function App() {
       </div>
       </header>
      
-     
-     <div >
-       <Table paginator class="borderIgnore"  memberInfo={getMembers()}>
+     <body>
+     <div className="center">
+       <Table class="child" memberInfo={getMembers()}>
          
        </Table>
      </div>
-      
+     </body>
     </main>
     
   );

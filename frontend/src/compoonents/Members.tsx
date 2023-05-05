@@ -20,7 +20,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 const Members = ({MemberData}: any) => {
   
   const memberInfo = MemberData?.members?.member || []
-  type TableData = {
+  type CommiteeData = {
     party: string;
     name: string;
     state: string;
@@ -41,7 +41,7 @@ const Members = ({MemberData}: any) => {
     return member?.['member-info']?.['state']?.['state-fullname'];
   };
   
-  var data: TableData[] = [
+  var data: CommiteeData[] = [
    
   ];
   
@@ -256,7 +256,7 @@ const onCityChange = (e: { value: any, checked: boolean }) => {
         <Column field="townname" sortable header="Town Name"></Column>
         <Column field="priorCongress" sortable header="Prior Congress"></Column>
         <Column field="phone" sortable header="Phone Number"></Column>
-        <Column field="officeLocation" sortable header="Office Location"></Column>
+        <Column field="officeLocation" sortable header="Location"></Column>
         
       </DataTable>
       </div>

@@ -12,7 +12,7 @@ const NavbarScroller = (props: {
     return (
       <Navbar>
         <Brand href={brand.to} ></Brand>
-        <img src={Logo} width="1280" height="162" ></img>
+        
         
       </Navbar >
     )

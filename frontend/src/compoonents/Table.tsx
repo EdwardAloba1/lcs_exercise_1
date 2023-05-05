@@ -197,6 +197,11 @@ const onRowSelect = (event: any) => {
     `Town Name: ${event.data.townname}` 
   )
 }
+
+const header = (event: any) => {
+  console.log("test")
+  
+}
 const inputText = (
   <div>
     <InputText value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} />
@@ -206,10 +211,13 @@ const inputText = (
   return (
     
     <div >
-      
       <div>
       
-      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown" value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+      <Dialog header="{header}" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+    Testing
+    </Dialog>
+
+      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
       
         <Column field="name" sortable  header="Name"></Column>
         <Column field="state" sortable header="State"></Column>

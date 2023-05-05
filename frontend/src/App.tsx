@@ -19,6 +19,22 @@ function App() {
     return memberData?.MemberData?.members?.member || [];
   }
 
+  const getPublishDate = () => {
+    const date = memberData?.MemberData?.['@publish-date']
+    return date
+  }
+
+  const getCongressData = () => {
+    const data = memberData?.MemberData?.['title-info'] || [];
+    
+    console.log(data?.clerk)
+    return (
+      <div>
+        Welcome to The Office of the Clerk! {data?.['congress-num']} {data?.clerk}
+      </div>
+    );
+  }
+
   const { brand, links } = navigation;
 
   // Fetch the data on mount
@@ -32,6 +48,8 @@ function App() {
     fetchData();
   }, []);
 
+  const memberDatas = getCongressData();
+  const publishDate = getPublishDate();
   return (
   <div>
     <div >
@@ -40,14 +58,18 @@ function App() {
         <Nav></Nav>
       <div className="navBar"></div>
       </div>
-    <h1 className="mb-3">Member Info</h1>
+    <h1 className="mb-3">Member Info </h1>
+    <h4>{memberDatas}</h4>
     <body>
      <div >
        <Table  memberInfo={getMembers()}></Table>
       </div>
+      
+      
     </body>
+    <footer>Published on: {publishDate}</footer>
+
   </div>
-    
   );
 }
 

@@ -9,6 +9,9 @@ import { Ripple } from 'primereact/ripple';
 import { BlockUI } from 'primereact/blockui';
 import { Panel } from 'primereact/panel';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { VirtualScroller } from 'primereact/virtualscroller';
+import { Paginator } from 'primereact/paginator';
+import { MultiSelect } from 'primereact/multiselect';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
@@ -197,6 +200,7 @@ const onRowSelect = (event: any) => {
     `Town Name: ${event.data.townname}` 
   )
 }
+const [visibleColumns, setVisibleColumns] = useState(columns);
 
 const header = (event: any) => {
   console.log("test")
@@ -216,7 +220,6 @@ const inputText = (
       <Dialog header="{header}" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
     Testing
     </Dialog>
-
       <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
       
         <Column field="name" sortable  header="Name"></Column>

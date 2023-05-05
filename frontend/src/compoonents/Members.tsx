@@ -12,18 +12,24 @@ import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { VirtualScroller } from 'primereact/virtualscroller';
 import { Paginator } from 'primereact/paginator';
 import { MultiSelect } from 'primereact/multiselect';
+import { Checkbox } from 'primereact/checkbox';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
 
-const Table = ({memberInfo}: any) => {
+const Members = ({memberInfo}: any) => {
 
   type TableData = {
     party: string;
     name: string;
     state: string;
     district: string;
-    townname: string
+    townname: string;
+    priorCongress: string;
+    phone: string;
+    officeLocation: string;
+    electedDate: string;
+    swornDate: string;
   };
 
   const getMemberName = (member: any): string => {
@@ -46,9 +52,19 @@ const Table = ({memberInfo}: any) => {
         name: members[i]?.['member-info']?.["official-name"] , 
         state: members[i]?.['member-info']?.['state']?.['state-fullname'],
         district: members[i]?.['member-info']?.['district'],
-        townname: members[i]?.['member-info']?.['townname'] })
-      
-  }
+        townname: members[i]?.['member-info']?.['townname'] ,
+        priorCongress: members[i]?.['member-info']?.['prior-congress'],
+        phone: members[i]?.['member-info']?.['phone'],
+        officeLocation: 
+        "Building: " + members[i]?.['member-info']?.['office-building'] + '\n' +
+        "Building Room: " + members[i]?.['member-info']?.['office-room'] + "\n" +
+        "Zip Code: " + members[i]?.['member-info']?.['office-zip'] + "\n",
+        electedDate: members[i]?.['member-info']?.['elected-date']?.['#text'],
+        swornDate: members[i]?.['member-info']?.['sworn-date']?.['#text']
+
+      })
+    }
+        
   }
 
 
@@ -73,9 +89,9 @@ const Table = ({memberInfo}: any) => {
 
   const sortedData = data.slice().sort((a, b) => {
     if (sortDirection === "asc") {
-      return a.state > b.state ? 1 : -1;
+      return a.name > b.name ? 1 : -1;
     } else if (sortDirection === "desc") {
-      return a.state < b.state ? 1 : -1;
+      return a.name < b.name ? 1 : -1;
     }
     return 0;
   });
@@ -211,22 +227,42 @@ const inputText = (
     <InputText value={filter} placeholder={`Search...`} type="text" onChange={handleFilter} />
   </div>
 );
+const [cities, setCities] = useState<any>([]);
+
+const onCityChange = (e: { value: any, checked: boolean }) => {
+  let selectedCities = [...cities];
+
+  if (e.checked)
+      selectedCities.push(e.value);
+  else
+      selectedCities.splice(selectedCities.indexOf(e.value), 1);
+
+  setCities(selectedCities);
+}
 
   return (
     
     <div >
+      
       <div>
       
       <Dialog header="{header}" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
     Testing
     </Dialog>
-      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '75rem' }}>
+    
+      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
       
         <Column field="name" sortable  header="Name"></Column>
-        <Column field="state" sortable header="State"></Column>
+        <Column field="electedDate" sortable header="Elected Date"></Column>
+        <Column field="swornDate" sortable header="Sworn Date"></Column>
         <Column field="party" sortable header="Party"></Column>
+        <Column field="state" sortable header="State"></Column>
         <Column field="district" sortable header="District"></Column>
         <Column field="townname" sortable header="Town Name"></Column>
+        <Column field="priorCongress" sortable header="Prior Congress"></Column>
+        <Column field="phone" sortable header="Phone Number"></Column>
+        <Column field="officeLocation" sortable header="Office Location"></Column>
+        
 
       </DataTable>
       </div>
@@ -234,4 +270,4 @@ const inputText = (
   );
 };
 
-export default Table;
+export default Members;

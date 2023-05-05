@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarScroller from './compoonents/NavbarScroller';
-import Table from './compoonents/Table';
+import Members from './compoonents/Members';
 import Navbar from 'react-bootstrap/Navbar';
 import { DataTable } from "primereact/datatable";
 import Nav from './compoonents/Nav/Nav'
@@ -24,13 +24,26 @@ function App() {
     return date
   }
 
+  const getPartyName = (partyLetter: any) => {
+
+    if(partyLetter == 'D'){
+      return "Democrat"
+    }else if(partyLetter == 'R'){
+      return "Republican"
+    }else return ""
+
+  }
+
   const getCongressData = () => {
     const data = memberData?.MemberData?.['title-info'] || [];
+    const party = getPartyName(data?.['majority'])
     
     console.log(data?.clerk)
     return (
       <div>
-        Welcome to The Office of the Clerk! {data?.['congress-num']} {data?.clerk}
+        <h2>Current Clerk is {data?.clerk}</h2>
+        Welcome to The Office of the Clerk! We are currently in session {data?.['session']} of the {data?.['congress-text']}. The majority party this session is the {party} party.
+        Find more information at {data?.weburl}
       </div>
     );
   }
@@ -58,11 +71,12 @@ function App() {
         <Nav></Nav>
       <div className="navBar"></div>
       </div>
-    <h1 className="mb-3">Member Info </h1>
+    
     <h4>{memberDatas}</h4>
+    <h1 className="mb-3">Member Info </h1>
     <body>
      <div >
-       <Table  memberInfo={getMembers()}></Table>
+       <Members  memberInfo={getMembers()}></Members>
       </div>
       
       

@@ -2,6 +2,7 @@ import React from 'react';
 import NavbarScroller from './compoonents/NavbarScroller';
 import Members from './compoonents/Members';
 import Commitee from './compoonents/Commitee';
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import Navbar from 'react-bootstrap/Navbar';
 import { DataTable } from "primereact/datatable";
@@ -52,7 +53,7 @@ function App() {
     
     console.log(data?.clerk)
     return (
-      <div>
+      <div className="p-3">
         <h2>Current Clerk is {data?.clerk}</h2>
         Welcome to The Office of the Clerk! We are currently in session {data?.['session']} of the {data?.['congress-text']}. The majority party this session is the {party} party.
         Find more information at {data?.weburl}

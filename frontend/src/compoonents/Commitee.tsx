@@ -1,5 +1,6 @@
+//@ts-nocheck
 import React, { useState, useEffect, useRef } from "react";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableRowEvent,DataTableRowToggleEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
@@ -177,13 +178,7 @@ const Commitee = ({ MemberData }: any) => {
     const [blockedPanel, setBlockedPanel] = useState<boolean>(true);
     const [blockedDocument, setBlockedDocument] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (blockedDocument) {
-            setTimeout(() => {
-                setBlockedDocument(true);
-            }, 3000);
-        }
-    }, [blockedDocument])
+    
 
     const blockDocument = () => {
         setBlockedDocument(true);
@@ -193,15 +188,6 @@ const Commitee = ({ MemberData }: any) => {
         setBlockedPanel(true);
     }
 
-    const unblockPanel = () => {
-        setBlockedPanel(false);
-    }
-
-    const dropdownOptions = [
-        { label: 10, value: 10 },
-        { label: 20, value: 20 },
-        { label: 50, value: 50 }
-    ];
 
     const onGlobalFilterChange = (event: any) => {
         const value = event.target.value;
@@ -245,7 +231,38 @@ const Commitee = ({ MemberData }: any) => {
 
         setCities(selectedCities);
     }
+    
+    
+    const allowExpansion = (rowData: CommiteeData) => {
+        const rowLength = rowData?.subcommitee?.length
+        if(rowLength!= undefined && rowLength>0){
+            
+            return true
+        }
+        console.log("Notx")
+        return false ;
+    };
+    
+    const rowExpansionTemplate = (rowData: any) => {
+        console.log("eddie")
 
+        return (
+            <div className="orders-subtable">
+                <h1 className="mb-3">Sub-Committees </h1>
+                <DataTable value={rowData?.subcommitee} responsiveLayout="scroll">
+                <Column field="subcommittee" sortable header="Sub-commitee Name"></Column>
+
+                   
+                </DataTable>
+            </div>
+        );
+    };
+
+    const [expandedRows, setExpandedRows] = useState(null);
+
+
+    
+    
     return (
 
         <div >
@@ -254,17 +271,20 @@ const Commitee = ({ MemberData }: any) => {
 
                 <Dialog header="{header}" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
                     Testing
-      </Dialog>
+                </Dialog>
 
-                <DataTable responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single" header={inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
+                
+                <DataTable onRowToggle={(e) => setExpandedRows(e.data)} expandedRows={expandedRows}  rowExpansionTemplate={rowExpansionTemplate}   responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single" header={inputText}  showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
 
-                    <Column field="name" sortable header="Name"></Column>
+                    <Column expander={allowExpansion} style={{ width: '5rem' }} />
+                    <Column field="name" sortable header="Commitee Name"></Column>
 
 
 
 
 
                 </DataTable>
+                
             </div>
         </div>
     );

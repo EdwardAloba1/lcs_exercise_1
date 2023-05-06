@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState} from "react";
 import { DataTable} from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from 'primereact/inputtext';
@@ -26,6 +26,7 @@ const Commitee = ({ MemberData }: any) => {
         name: string
     }
 
+    //Returns all subcomittee Data from a commitee to an array
     const getSubcomittees = (inputData: any) => {
         var subComitteeData: SubcomiteeData[] = [];
 
@@ -48,11 +49,7 @@ const Commitee = ({ MemberData }: any) => {
         for (let i = 0; i < commitee.length; i++) {
             if (commitee[i].hasOwnProperty("subcommittee")) {
 
-                //console.log("SubCommitee: "+ commitee[i]?.['subcommittee'].length)
-
                 sub = getSubcomittees(commitee[i])
-
-                //console.log(sub)
 
                 data.push({
                     name: commitee[i]?.['committee-fullname'],
@@ -61,7 +58,6 @@ const Commitee = ({ MemberData }: any) => {
                 })
 
             }
-
 
             else {
                 data.push({
@@ -130,7 +126,7 @@ const Commitee = ({ MemberData }: any) => {
         );
     };
 
-
+//Return Commitee Table
     return (
         <div >
             <div>

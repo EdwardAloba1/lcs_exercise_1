@@ -6,7 +6,6 @@ import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 
-
 const Members = ({MemberData}: any) => {
   
   const memberInfo = MemberData?.members?.member || []
@@ -23,22 +22,19 @@ const Members = ({MemberData}: any) => {
     swornDate: string;
   };
   
-  const getMemberName = (member: any): string => {
-    return member?.['member-info']?.["official-name"] || '';
-  };
+  var data: CommiteeData[] = [];
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const getMemberState = (member: any): string => {
-    return member?.['member-info']?.['state']?.['state-fullname'];
-  };
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [filter, setFilter] = useState("");
+  const [displayBasic, setDisplayBasic] = useState(false);
+  const [position, setPosition] = useState('center');
   
-  var data: CommiteeData[] = [
-   
-  ];
   
+  // Push all member data into memberInfo structure
   function pushData(members:any){
     for(let i=0; i<members.length; i++){
 
-      //console.log(memberInfo.map((s) => getMemberState(s))); //use i instead of 0
       data.push({party: members[i]?.['member-info']?.["party"], 
         name: members[i]?.['member-info']?.["official-name"] , 
         state: members[i]?.['member-info']?.['state']?.['state-fullname'],
@@ -57,18 +53,6 @@ const Members = ({MemberData}: any) => {
     }
         
   }
-
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(30);
-  const [sortColumn, setSortColumn] = useState("");
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [filter, setFilter] = useState("");
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const [filters, setFilters] = useState({
-    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-});
   
   pushData(memberInfo)
 
@@ -86,27 +70,11 @@ const Members = ({MemberData}: any) => {
     return item.name.toLowerCase().includes(filter.toLowerCase());
   });
   
- 
-
   const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(event.target.value);
     setCurrentPage(1);
   };
 
-
-
-const [selectedColumns, setSelectedColumns] = useState(data);
-
-const onColumnToggle = (event: any) => {
-  console.log("column ckech")
-
-    let selectedColumns = event.value;
-    let orderedSelectedColumns = filteredData.filter(col => selectedColumns.some((sCol: any) => sCol.field === col?.["name"]));
-    setSelectedColumns(orderedSelectedColumns);
-}
-
-const [displayBasic, setDisplayBasic] = useState(false);
-const [position, setPosition] = useState('center');
 
 const dialogFuncMap = {
   'displayBasic': setDisplayBasic,
@@ -121,10 +89,7 @@ const onClick = ( event:any) => {
  
 }
 
-
-
-
-//To-do
+//To-do ( add drop down for members)
 const onRowSelect = (event: any) => {
   console.log(event)
   alert(
@@ -141,8 +106,7 @@ const inputText = (
     <InputText value={filter} placeholder={`Search Name...`} type="text" onChange={handleFilter} />
   </div>
 );
-
-
+//Return Members Table
   return (
     
     <div >

@@ -24,6 +24,7 @@ const Commitee = ({ MemberData }: any) => {
     type CommiteeData = {
 
         name: string;
+        type: string;
         subcommitee?: SubcomiteeData[]
 
     };
@@ -62,7 +63,8 @@ const Commitee = ({ MemberData }: any) => {
 
                 data.push({
                     name: commitee[i]?.['committee-fullname'],
-                    subcommitee: sub
+                    subcommitee: sub,
+                    type: commitee[i]?.['@type']
                 })
 
             }
@@ -71,6 +73,7 @@ const Commitee = ({ MemberData }: any) => {
             else {
                 data.push({
                     name: commitee[i]?.['committee-fullname'],
+                    type: commitee[i]?.['@type']
 
                 })
             }
@@ -246,22 +249,20 @@ const Commitee = ({ MemberData }: any) => {
     const rowExpansionTemplate = (rowData: any) => {
         console.log("eddie")
 
+        console.log(rowData?.subcommitee)
+        console.log(filteredData)
+
         return (
             <div className="orders-subtable">
                 <h1 className="mb-3">Sub-Committees </h1>
                 <DataTable value={rowData?.subcommitee} responsiveLayout="scroll">
-                <Column field="subcommittee" sortable header="Sub-commitee Name"></Column>
-
-                   
+                <Column field="name" sortable header="Sub-commitee Name"></Column>
                 </DataTable>
             </div>
         );
     };
 
     const [expandedRows, setExpandedRows] = useState(null);
-
-
-    
     
     return (
 
@@ -269,15 +270,13 @@ const Commitee = ({ MemberData }: any) => {
 
             <div>
 
-                <Dialog header="{header}" keepInViewport visible={displayBasic} style={{ width: '100vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
-                    Testing
-                </Dialog>
-
                 
-                <DataTable onRowToggle={(e) => setExpandedRows(e.data)} expandedRows={expandedRows}  rowExpansionTemplate={rowExpansionTemplate}   responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single" header={inputText}  showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
+                <DataTable onRowToggle={(e) => setExpandedRows(e.data)} datakey="" expandedRows={expandedRows}  rowExpansionTemplate={rowExpansionTemplate}   responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single" header={inputText}  showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
 
+                    
                     <Column expander={allowExpansion} style={{ width: '5rem' }} />
                     <Column field="name" sortable header="Commitee Name"></Column>
+                    <Column field="type" sortable header="Commitee Type"></Column>
 
 
 

@@ -1,5 +1,5 @@
 # Edward Aloba Documentation
-#Intro
+## Intro
 My goal for this project was to be able to demonstrate my skills with front end and back end work. My goal was to be able to abstract all the code so it's easy for anyone to read. I created a class for Members Table, and Commitee table.
 
 

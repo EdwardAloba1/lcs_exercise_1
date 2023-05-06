@@ -24,13 +24,42 @@ const Commitee = ({ MemberData }: any) => {
         phone?: string;
         location?: string;
         subcommitee?: SubcomiteeData[]
+        members?: Members[]
     };
 
     type SubcomiteeData = {
         name: string
         ratio: string
         location: string
+        members?: Members[]
+
     }
+
+    type Members = {
+        democrat?: string
+        republican?: string
+    }
+
+    let committeeMap = new Map<string, string>();
+    let subCommitteeMap = new Map<string, string>();
+
+    const createCommitteMap = () => {
+        //Iterate through all the committees
+        for(let i=0; i<MemberData?.committees?.committee.length; i++){
+          const committee = MemberData?.committees?.committee
+    
+          //Checks if the committee has subcommittees
+          if(committee[i].hasOwnProperty("subcommittee")){
+            for(let j=0;j<committee[i]?.['subcommittee'].length;j++){
+            const subcomiteeName = committee[i]?.['subcommittee'][j]?.['subcommittee-fullname']
+            subCommitteeMap.set(committee[i]?.['subcommittee'][j]?.['@subcomcode'], subcomiteeName)
+            }
+          }
+          committeeMap.set(committee[i]?.["@comcode"],committee[i]?.["committee-fullname"])
+        }
+        console.log(committeeMap)
+      }
+
 
     //Returns all subcomittee Data from a commitee to an array
     const getSubcomittees = (inputData: any) => {
@@ -54,18 +83,59 @@ const Commitee = ({ MemberData }: any) => {
         return subComitteeData
     };
 
+    const findCommitees = (inputData: any) => {
+    
+    }
+
+    const getCommitteeMembers = (inputData: any) => {
+        var committeeMembers: Members[] = [];
+        var member = MemberData?.members?.member
+        for (let i=0; i<member.length; i++){
+
+            if(member[i]?.['member-info']?.['party'] == 'D'){
+                for(let j = 0; j < member[i]?.['committee-assignments']?.['committee'].length;j++){
+                    var dem: string;
+                    var rep: string;
+                    var rank = member[i]?.['committee-assignments']?.['committee'][j]?.['@rank']
+                    if(member[i]?.['member-info']?.['party'] == 'R'){
+                        rep = rank +". " + member[i]?.['member-info']?.['official-name']
+                    }
+                    if(member[i]?.['member-info']?.['party'] == 'D'){
+                        dem = rank +". " + member[i]?.['member-info']?.['official-name']
+                    }
+                    
+                    console.log(rep)
+                    committeeMembers.push({
+                        democrat:"",
+                        
+                    })
+                }
+                
+            }
+            
+            //console.log(inputData)
+
+        }
+
+
+    }
 
     //Parses all data into SubcomiteeData and CommiteeData structures
     function pushData(commitee: any) {
         var sub: SubcomiteeData[] = [];
+        var comMembers: Members[] = [];
+
+        createCommitteMap()
+
         for (let i = 0; i < commitee.length; i++) {
             //Check if this committee has a subcommitte property
             if (commitee[i].hasOwnProperty("subcommittee")) {
 
                 sub = getSubcomittees(commitee[i])
-
+                comMembers = getCommitteeMembers(commitee[i])
                 data.push({
                     subcommitee: sub,
+                    members: comMembers,
                     name: commitee[i]?.['committee-fullname'],
                     type: commitee[i]?.['@type'],
                     commiteeHeader: commitee[i]?.["@com-header-text"],
@@ -77,6 +147,7 @@ const Commitee = ({ MemberData }: any) => {
                     "Room: " + commitee[i]?.["@com-room"] + 
                     ", Building: " + commitee[i]?.["@com-building-code"] +
                     ", Zip-Code: " + commitee[i]?.["@com-zip"],
+
                 })
 
             }

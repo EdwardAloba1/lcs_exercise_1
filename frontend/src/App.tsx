@@ -13,10 +13,6 @@ function App() {
     return memberData?.MemberData || [];
   }
 
-  const getMembers = () => {
-    return memberData?.MemberData?.members?.member || [];
-  }
-
   const getPublishDate = () => {
     const date = memberData?.MemberData?.['@publish-date']
     return date
@@ -30,12 +26,6 @@ function App() {
     } else if (partyLetter == 'R') {
       return "Republican"
     } else return ""
-
-  }
-
-  const getCommiteeInfo = () => {
-
-    return memberData?.MemberData?.['committees']?.['committee'] || [];
 
   }
 

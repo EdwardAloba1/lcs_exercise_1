@@ -98,8 +98,8 @@ const Members = ({MemberData}: any) => {
         leadership: committeeAssignments?.['committee'][i]?.["@leadership"]
       })
 
-    return ComitteeData
   }
+  return ComitteeData
 }
 
   // Push all member data into memberInfo structure

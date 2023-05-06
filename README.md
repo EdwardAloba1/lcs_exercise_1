@@ -50,11 +50,11 @@ In the HTML render that's returned at the bottom of the page, you see two differ
 In the Members element, the first thing we do is filter the json information passed through the members parameter and filter it down to each member. 
 CommiteeData is the data structure used to define the elements that will be inputted into the table.
 
-The function pushData gets all the json information as defined in CommiteeData and pushes it into an array called data of type CommiteeData info about the members.
+The function pushData gets all the json information as defined in CommiteeData and pushes it into an array called data of type CommiteeData info about the members. In the CommitteeData structure, there are 2 subarrays of called committee and subcommittee that are also parsed as well. 
+
+To make the parsing of the committe and subcommitte more efficient, when the ```pushData()``` function is called another function called ```createCommitteMap()``` gets initialized. This function puts all the committe and subcommittee abreviations in a map so that we can later grab the committe and subcommitte names the member is apart of more efficiently. 
 
 The sortedData, filteredData and handleFilter are all functions that handle the sorting, and searching within the table. By default, the table is sorted by name in alphabetical order.
-
-One feature I wanted to add in this element was a dropdown table for each member. I wanted to add a drop down menu so I can be able to reduce the amounts of elements in the table, as well include commitee information for each member which I didn't get the chance to do.
 
 ## [Commitee.tsx](frontend/src/compoonents/Commitee.tsx)
 
@@ -68,7 +68,7 @@ We then have our filtering/searching function filteredData, handleFilter, and so
 ## Closing Thoughts
 Because of the time constraints it was difficult to incorporate all of the different features I had in mind and the time constraints in place. Especially given the fact more ideas kept popping up.
 
-Overrall I think there are some things that could have been improved with this design such as making the subcommittees a drop down under the committees table in member information.
+Overrall I think there are some things that could have been improved with this design such as making the subcommittees a drop down under the committees table in member information. Along with that, adding a ranking system for committee and subcommittee sections in the committee table as well.
 
 Another thing that could have been done is separating the member and commitee information tables by pages. I felt like this would be a great idea and would make sense, but was difficult because of the other feature priorities and time.
 

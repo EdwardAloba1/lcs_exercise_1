@@ -14,7 +14,7 @@ const Commitee = ({ MemberData }: any) => {
     const [sortDirection, setSortDirection] = useState("asc");
     const [filter, setFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    
+
     type CommiteeData = {
 
         name: string;
@@ -57,9 +57,9 @@ const Commitee = ({ MemberData }: any) => {
 
     //Parses all data into SubcomiteeData and CommiteeData structures
     function pushData(commitee: any) {
-        console.log("pushData")
         var sub: SubcomiteeData[] = [];
         for (let i = 0; i < commitee.length; i++) {
+            //Check if this committee has a subcommitte property
             if (commitee[i].hasOwnProperty("subcommittee")) {
 
                 sub = getSubcomittees(commitee[i])
@@ -140,11 +140,9 @@ const Commitee = ({ MemberData }: any) => {
         return false;
     };
 
+    //Template for dropdown table
+    //Contains Subcommittees
     const rowExpansionTemplate = (rowData: any) => {
-      
-
-        console.log(rowData)
-        console.log(filteredData)
 
         return (
             <div className="orders-subtable">

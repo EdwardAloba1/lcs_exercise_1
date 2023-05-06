@@ -50,16 +50,17 @@ const Members = ({MemberData}: any) => {
   let subCommitteeMap = new Map<string, string>();
 
 
-  //This function created a map for all of the committee/subcommitee abreviations and the corresponding name
+  //This function creates a map for all of the committee/subcommitee abreviations and the corresponding name
   const createCommitteMap = () => {
+    //Iterate through all the committees
     for(let i=0; i<MemberData?.committees?.committee.length; i++){
       const committee = MemberData?.committees?.committee
 
+      //Checks if the committee has subcommittees
       if(committee[i].hasOwnProperty("subcommittee")){
         for(let j=0;j<committee[i]?.['subcommittee'].length;j++){
         const subcomiteeName = committee[i]?.['subcommittee'][j]?.['subcommittee-fullname']
         subCommitteeMap.set(committee[i]?.['subcommittee'][j]?.['@subcomcode'], subcomiteeName)
-        console.log(subCommitteeMap)
         }
       }
       committeeMap.set(committee[i]?.["@comcode"],committee[i]?.["committee-fullname"])
@@ -107,6 +108,7 @@ const Members = ({MemberData}: any) => {
     var tempCommittee: commmitee[] = [];
     var tempSubcommittee: subcommmitee[] = [];
 
+    //Creates <abbreviation, full Name> map for committe and subcommitte's
     createCommitteMap()
 
     for(let i=0; i<members.length; i++){
@@ -161,12 +163,9 @@ const inputText = (
   </div>
 );
 
-
+// Template for DropDown table
+// Contains Committe and Subcommittee
 const rowExpansionTemplate = (rowData: any) => {
-      
-
-  console.log(rowData)
-  //console.log(filteredData)
 
   return (
       <div className="orders-subtable">
@@ -195,7 +194,17 @@ const rowExpansionTemplate = (rowData: any) => {
     <div >
       <div>
     
-      <DataTable  onRowToggle={(e) => setExpandedRows(e.data)} responsiveLayout="scroll" rowExpansionTemplate={rowExpansionTemplate} expandedRows={expandedRows} datakey="" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText}  showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
+      <DataTable  onRowToggle={(e) => setExpandedRows(e.data)} 
+                  responsiveLayout="scroll" 
+                  rowExpansionTemplate={rowExpansionTemplate} 
+                  expandedRows={expandedRows} 
+                  datakey="" 
+                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " 
+                  value={filteredData} 
+                  selectionMode="single"  
+                  header = {inputText}  
+                  showGridlines paginator stripedRows rows={10} 
+                  rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
         <Column expander={true} style={{ width: '5rem' }} />
         <Column field="name" sortable  header="Name"></Column>
         <Column field="electedDate" sortable header="Elected Date"></Column>

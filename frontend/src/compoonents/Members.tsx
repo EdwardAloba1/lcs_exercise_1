@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -20,21 +21,98 @@ const Members = ({MemberData}: any) => {
     officeLocation: string;
     electedDate: string;
     swornDate: string;
+    commitee?: commmitee[];
+    subcomitee?: subcommittee[];
   };
-  
+
+  type commmitee = {
+    name: string;
+    leadership?: string;
+    rank: string;
+  }
+
+  type subcommittee = {
+    name: string;
+    leadership: string;
+    rank: string;
+
+  }
+
+
   var data: CommiteeData[] = [];
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [expandedRows, setExpandedRows] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [filter, setFilter] = useState("");
   const [displayBasic, setDisplayBasic] = useState(false);
   const [position, setPosition] = useState('center');
-  
-  
+  let committeeMap = new Map<string, string>();
+  let subCommitteeMap = new Map<string, string>();
+
+
+  //This function created a map for all of the committee/subcommitee abreviations and the corresponding name
+  const createCommitteMap = () => {
+    for(let i=0; i<MemberData?.committees?.committee.length; i++){
+      const committee = MemberData?.committees?.committee
+
+      if(committee[i].hasOwnProperty("subcommittee")){
+        for(let j=0;j<committee[i]?.['subcommittee'].length;j++){
+        const subcomiteeName = committee[i]?.['subcommittee'][j]?.['subcommittee-fullname']
+        subCommitteeMap.set(committee[i]?.['subcommittee'][j]?.['@subcomcode'], subcomiteeName)
+        console.log(subCommitteeMap)
+        }
+      }
+      committeeMap.set(committee[i]?.["@comcode"],committee[i]?.["committee-fullname"])
+    }
+  }
+
+  //This function returns the name of the subcommitte when given in abbreviated form
+  const getSubcommittees = (committeeAssignments: any) => {
+    
+    var SubcommitteeData: subcommittee[] = [];
+
+    for(let i=0; i<committeeAssignments?.['subcommittee']?.length; i++){
+
+      SubcommitteeData.push({
+        name: subCommitteeMap.get(committeeAssignments?.['subcommittee'][i]?.["@subcomcode"]),
+        rank: committeeAssignments?.['subcommittee'][i]?.["@rank"],
+        leadership: committeeAssignments?.['subcommittee'][i]?.["@leadership"]
+      })
+
+    }
+
+    return SubcommitteeData
+
+  }
+
+    //This function returns the name of the committe when given in abbreviated form
+  const getCommittees = (committeeAssignments: any) => {
+    var ComitteeData: commmitee[] = [];
+
+    for(let i=0; i<committeeAssignments?.['committee'].length; i++){
+
+      ComitteeData.push({
+        name: committeeMap.get(committeeAssignments?.['committee'][i]?.["@comcode"]),
+        rank: committeeAssignments?.['committee'][i]?.["@rank"],
+        leadership: committeeAssignments?.['committee'][i]?.["@leadership"]
+      })
+
+    return ComitteeData
+  }
+}
+
   // Push all member data into memberInfo structure
   function pushData(members:any){
-    for(let i=0; i<members.length; i++){
 
+    var tempCommittee: commmitee[] = [];
+    var tempSubcommittee: subcommmitee[] = [];
+
+    createCommitteMap()
+
+    for(let i=0; i<members.length; i++){
+      
+      tempCommittee = getCommittees(members[i]?.['committee-assignments'])
+      tempSubcommittee = getSubcommittees(members[i]?.['committee-assignments'])
       data.push({party: members[i]?.['member-info']?.["party"], 
         name: members[i]?.['member-info']?.["official-name"] , 
         state: members[i]?.['member-info']?.['state']?.['state-fullname'],
@@ -47,8 +125,9 @@ const Members = ({MemberData}: any) => {
         "Building Room: " + members[i]?.['member-info']?.['office-room'] + "\n" +
         "Zip Code: " + members[i]?.['member-info']?.['office-zip'] + "\n",
         electedDate: members[i]?.['member-info']?.['elected-date']?.['#text'],
-        swornDate: members[i]?.['member-info']?.['sworn-date']?.['#text']
-
+        swornDate: members[i]?.['member-info']?.['sworn-date']?.['#text'],
+        commitee: tempCommittee,
+        subcomitee : tempSubcommittee
       })
     }
         
@@ -76,44 +155,48 @@ const Members = ({MemberData}: any) => {
   };
 
 
-const dialogFuncMap = {
-  'displayBasic': setDisplayBasic,
-}
-
-const onClick = ( event:any) => {
-  dialogFuncMap["displayBasic"](true);
-  console.log(event.data.name)
-  if (position) {
-      setPosition(position);
-  }
- 
-}
-
-//To-do ( add drop down for members)
-const onRowSelect = (event: any) => {
-  console.log(event)
-  alert(
-    `Name: ${event.data.name} `+'\n'+
-    `State: ${event.data.state}`+'\n'+
-    `Party: ${event.data.party}`+'\n'+
-    `District: ${event.data.district}`+'\n'+
-    `Town Name: ${event.data.townname}` 
-  )
-}
-
 const inputText = (
   <div>
     <InputText value={filter} placeholder={`Search Name...`} type="text" onChange={handleFilter} />
   </div>
 );
+
+
+const rowExpansionTemplate = (rowData: any) => {
+      
+
+  console.log(rowData)
+  //console.log(filteredData)
+
+  return (
+      <div className="orders-subtable">
+          <h1 className="mb-3">Committees </h1>
+          <DataTable value={rowData?.commitee} responsiveLayout="scroll">
+              <Column field="name" sortable header="Commitee Name"></Column>
+              <Column field="rank" sortable header="Rank"></Column>
+              <Column field="leadership" sortable header="Leadership Position"></Column>
+
+
+          </DataTable>
+          <h1 className="mb-3">Subcommittees </h1>
+          <DataTable value={rowData?.subcomitee} responsiveLayout="scroll">
+          <Column field="name" sortable header="Commitee Name"></Column>
+              <Column field="rank" sortable header="Rank"></Column>
+              <Column field="leadership" sortable header="Leadership Position"></Column>
+              
+          </DataTable>
+      </div>
+  );
+};
+
 //Return Members Table
   return (
     
     <div >
       <div>
     
-      <DataTable  responsiveLayout="scroll" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText} onRowSelect={onClick} showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
-      
+      <DataTable  onRowToggle={(e) => setExpandedRows(e.data)} responsiveLayout="scroll" rowExpansionTemplate={rowExpansionTemplate} expandedRows={expandedRows} datakey="" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink " value={filteredData} selectionMode="single"  header = {inputText}  showGridlines paginator stripedRows rows={10} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
+        <Column expander={true} style={{ width: '5rem' }} />
         <Column field="name" sortable  header="Name"></Column>
         <Column field="electedDate" sortable header="Elected Date"></Column>
         <Column field="swornDate" sortable header="Sworn Date"></Column>

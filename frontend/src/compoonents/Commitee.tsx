@@ -13,17 +13,23 @@ const Commitee = ({ MemberData }: any) => {
     const commiteeInfo = MemberData?.['committees']?.['committee'] || []
     const [sortDirection, setSortDirection] = useState("asc");
     const [filter, setFilter] = useState("");
-
+    const [currentPage, setCurrentPage] = useState(1);
+    
     type CommiteeData = {
 
         name: string;
         type: string;
+        commiteeHeader: string;
+        ratio: string;
+        phone?: string;
+        location?: string;
         subcommitee?: SubcomiteeData[]
-
     };
 
     type SubcomiteeData = {
         name: string
+        ratio: string
+        location: string
     }
 
     //Returns all subcomittee Data from a commitee to an array
@@ -33,7 +39,14 @@ const Commitee = ({ MemberData }: any) => {
         for (let i = 0; i < inputData?.['subcommittee'].length; i++) {
 
             subComitteeData.push({
-                name: inputData?.['subcommittee'][i]?.['subcommittee-fullname']
+                name: inputData?.['subcommittee'][i]?.['subcommittee-fullname'],
+                ratio: 
+                "Majority: " + inputData?.['subcommittee'][i]?.["ratio"]?.["majority"] + "\n" +
+                "Minority: " + inputData?.['subcommittee'][i]?.["ratio"]?.["minority"],
+                location: 
+                    "Room: " + inputData?.['subcommittee'][i]?.["@subcom-room"] + 
+                    ", Building: " + inputData?.['subcommittee'][i]?.["@subcom-building-code"] +
+                    ", Zip-Code: " + inputData?.['subcommittee'][i]?.["@subcom-zip"],
             }
             )
         }
@@ -52,9 +65,18 @@ const Commitee = ({ MemberData }: any) => {
                 sub = getSubcomittees(commitee[i])
 
                 data.push({
-                    name: commitee[i]?.['committee-fullname'],
                     subcommitee: sub,
-                    type: commitee[i]?.['@type']
+                    name: commitee[i]?.['committee-fullname'],
+                    type: commitee[i]?.['@type'],
+                    commiteeHeader: commitee[i]?.["@com-header-text"],
+                    phone: "(202) " + commitee[i]?.["@com-phone"],
+                    ratio: 
+                    "Majority: " + commitee[i]?.["ratio"]?.["majority"] + "\n" +
+                    "Minority: " + commitee[i]?.["ratio"]?.["minority"],
+                    location: 
+                    "Room: " + commitee[i]?.["@com-room"] + 
+                    ", Building: " + commitee[i]?.["@com-building-code"] +
+                    ", Zip-Code: " + commitee[i]?.["@com-zip"],
                 })
 
             }
@@ -62,8 +84,16 @@ const Commitee = ({ MemberData }: any) => {
             else {
                 data.push({
                     name: commitee[i]?.['committee-fullname'],
-                    type: commitee[i]?.['@type']
-
+                    type: commitee[i]?.['@type'],
+                    commiteeHeader: commitee[i]?.["@com-header-text"],
+                    phone: "(202) " + commitee[i]?.["@com-phone"],
+                    ratio: 
+                    "Majority: " + commitee[i]?.["ratio"]?.["majority"] + "\n" +
+                    "Minority: " + commitee[i]?.["ratio"]?.["minority"],
+                    location: 
+                    "Room: " + commitee[i]?.["@com-room"] + 
+                    ", Building: " + commitee[i]?.["@com-building-code"] +
+                    ", Zip-Code: " + commitee[i]?.["@com-zip"],
                 })
             }
         }
@@ -113,7 +143,7 @@ const Commitee = ({ MemberData }: any) => {
     const rowExpansionTemplate = (rowData: any) => {
       
 
-        console.log(rowData?.subcommitee)
+        console.log(rowData)
         console.log(filteredData)
 
         return (
@@ -121,7 +151,11 @@ const Commitee = ({ MemberData }: any) => {
                 <h1 className="mb-3">Sub-Committees </h1>
                 <DataTable value={rowData?.subcommitee} responsiveLayout="scroll">
                     <Column field="name" sortable header="Sub-commitee Name"></Column>
+                    <Column field="ratio" sortable header="Sub-commitee Ratio"></Column>
+                    <Column field="location" sortable header="Location"></Column>
+
                 </DataTable>
+                
             </div>
         );
     };
@@ -147,6 +181,11 @@ const Commitee = ({ MemberData }: any) => {
                     <Column expander={allowExpansion} style={{ width: '5rem' }} />
                     <Column field="name" sortable header="Commitee Name"></Column>
                     <Column field="type" sortable header="Commitee Type"></Column>
+                    <Column field="ratio" sortable header="Committee Ratio"></Column>
+                    <Column field="commiteeHeader" sortable header="Committee Header"></Column>
+                    <Column field="phone" sortable header="Phone Number"></Column>
+                    <Column field="location" sortable header="Location"></Column>
+
                 </DataTable>
 
             </div>

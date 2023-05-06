@@ -15,6 +15,8 @@ After the Navigation bar there is a brief introduction that welcomes you to the 
 ###### Member Information
 After the introduction, it goes to the Member Information table. This table includes many different elements that you can sort by, and also has a search bar you can use to search for member names.
 
+Along with being able to sort members by various different selections, this table also includes a dropdown that shows the committees and subcommittees of the different members
+
 ###### Commitee Information
 After the member information table we see the commitee table. This table includes sorting and a search bar similar to the Members table. What's different about this table is that it has a drop down element to see te sub-commitees in the commitee.
 
@@ -46,7 +48,7 @@ In the HTML render that's returned at the bottom of the page, you see two differ
 ## [Members.tsx](frontend/src/compoonents/Members.tsx)
 
 In the Members element, the first thing we do is filter the json information passed through the members parameter and filter it down to each member. 
-CommiteeData is the data structore used to define the elements that will be inputted into the table.
+CommiteeData is the data structure used to define the elements that will be inputted into the table.
 
 The function pushData gets all the json information as defined in CommiteeData and pushes it into an array called data of type CommiteeData info about the members.
 
@@ -63,14 +65,10 @@ The pushData function pushed all the commitee info into the structures via varia
 We then have our filtering/searching function filteredData, handleFilter, and sorted data which we discussed above. And we also have our functions that allow us to expand the table.
 
 
-If I had more time, I would have added the commitees that the different members were apart of to the members table, and the members that are apart of the different commitees.
-
 ## Closing Thoughts
 Because of the time constraints it was difficult to incorporate all of the different features I had in mind and the time constraints in place. Especially given the fact more ideas kept popping up.
 
-Overrall I think there are some things that could have been improved with this design such as incorporating more information about commitee within member information table and more member information within the commitee table. This cross referencing would help the user visualize and have a better grasp of how the clerk is structured and the different commitees that are present. 
-
-In the members table this feature would have been where I put the #To-do regarding the drop down.
+Overrall I think there are some things that could have been improved with this design such as making the subcommittees a drop down under the committees table in member information.
 
 Another thing that could have been done is separating the member and commitee information tables by pages. I felt like this would be a great idea and would make sense, but was difficult because of the other feature priorities and time.
 

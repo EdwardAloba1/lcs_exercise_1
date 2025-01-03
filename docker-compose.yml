@@ -13,10 +13,10 @@ services:
 
   api:
     image: mcr.microsoft.com/dotnet/sdk:7.0
-    command: dotnet watch run --urls http://0.0.0.0:5000/
+    command: dotnet watch run --urls http://0.0.0.0:5001/
     working_dir: /api
     ports:
-      - "5000:5000"
+      - "5001:5001"
     volumes:
       - type: bind
         source: ./api

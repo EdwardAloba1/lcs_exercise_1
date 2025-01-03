@@ -10,9 +10,11 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 const Members = ({MemberData}: any) => {
   
   const memberInfo = MemberData?.members?.member || []
+  
   type CommiteeData = {
     party: string;
     name: string;
+    photoId: string;
     state: string;
     district: string;
     townname: string;
@@ -117,6 +119,7 @@ const Members = ({MemberData}: any) => {
       tempSubcommittee = getSubcommittees(members[i]?.['committee-assignments'])
       data.push({party: members[i]?.['member-info']?.["party"], 
         name: members[i]?.['member-info']?.["official-name"] , 
+        photoId: members[i]?.['member-info']?.["bioguideID"] ,
         state: members[i]?.['member-info']?.['state']?.['state-fullname'],
         district: members[i]?.['member-info']?.['district'],
         townname: members[i]?.['member-info']?.['townname'] ,
@@ -188,12 +191,21 @@ const rowExpansionTemplate = (rowData: any) => {
   );
 };
 
+const imageBodyTemplate = (rowData) => {
+  const representative = rowData.representative;
+  return (
+      <React.Fragment>
+          <img src={`https://clerk.house.gov/images/members/${rowData.photoId}.jpg`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} width={100} style={{ verticalAlign: 'middle' }} />
+          
+      </React.Fragment>
+  );
+}
+
 //Return Members Table
   return (
     
     <div >
       <div>
-    
       <DataTable  onRowToggle={(e) => setExpandedRows(e.data)} 
                   responsiveLayout="scroll" 
                   rowExpansionTemplate={rowExpansionTemplate} 
@@ -207,11 +219,12 @@ const rowExpansionTemplate = (rowData: any) => {
                   rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '100rem' }}>
         <Column expander={true} style={{ width: '5rem' }} />
         <Column field="name" sortable  header="Name"></Column>
+        <Column field="photo" body = {imageBodyTemplate}  header="Photo"></Column>
         <Column field="electedDate" sortable header="Elected Date"></Column>
         <Column field="swornDate" sortable header="Sworn Date"></Column>
         <Column field="party" sortable header="Party"></Column>
-        <Column field="state" sortable header="State"></Column>
         <Column field="district" sortable header="District"></Column>
+        <Column field="state" sortable header="State"></Column>
         <Column field="townname" sortable header="Town Name"></Column>
         <Column field="priorCongress" sortable header="Prior Congress"></Column>
         <Column field="phone" sortable header="Phone Number"></Column>
